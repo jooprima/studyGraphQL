@@ -1,6 +1,6 @@
 const graphql = require("graphql");
 
-const { GraphQLObjectType, GraphQLString } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
 
 const JurusanType = new GraphQLObjectType({
   name: "jurusan",
@@ -9,4 +9,19 @@ const JurusanType = new GraphQLObjectType({
     jurusan: { type: GraphQLString },
     kaprodi: { type: GraphQLString }
   })
+});
+
+const RootQuery = new GraphQLObjectType({
+  name: "RootQueryType",
+  fields: {
+    prodi: {
+      type: JurusanType,
+      args: { id: { type: GraphQLString } },
+      resolve(parent, args) {}
+    }
+  }
+});
+
+module.exports = new GraphQLSchema({
+  query: RootQuery
 });
