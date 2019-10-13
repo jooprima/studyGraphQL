@@ -7,7 +7,8 @@ const {
   GraphQLString,
   GraphQLSchema,
   GraphQLID,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList
 } = graphql;
 
 var jurusanx = [
@@ -18,8 +19,11 @@ var jurusanx = [
 
 var data_mahasiswa = [
   { nama: "agung", umur: 30, id: "1", jurusanid: "2" },
-  { nama: "mawar", umur: 20, id: "2", jurusanid: "3" },
-  { nama: "cemen", umur: 39, id: "3", jurusanid: "1" }
+  { nama: "fikri", umur: 20, id: "2", jurusanid: "3" },
+  { nama: "wawan", umur: 20, id: "3", jurusanid: "2" },
+  { nama: "aceng", umur: 23, id: "4", jurusanid: "1" },
+  { nama: "mawar", umur: 20, id: "5", jurusanid: "2" },
+  { nama: "cemen", umur: 39, id: "6", jurusanid: "1" }
 ];
 
 const JurusanType = new GraphQLObjectType({
@@ -27,7 +31,13 @@ const JurusanType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     jurusan: { type: GraphQLString },
-    kaprodi: { type: GraphQLString }
+    kaprodi: { type: GraphQLString },
+    mahasiswa: {
+      type: new GraphQLList(MahasiswaType),
+      resolve(parent, args) {
+        return _.filter(data_mahasiswa, { jurusanid: parent.id });
+      }
+    }
   })
 });
 
