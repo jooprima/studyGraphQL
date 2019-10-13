@@ -17,9 +17,9 @@ var jurusanx = [
 ];
 
 var data_mahasiswa = [
-  { nama: "agung", umur: 30, id: "1" },
-  { nama: "mawar", umur: 20, id: "2" },
-  { nama: "cemen", umur: 39, id: "3" }
+  { nama: "agung", umur: 30, id: "1", jurusanid: "2" },
+  { nama: "mawar", umur: 20, id: "2", jurusanid: "3" },
+  { nama: "cemen", umur: 39, id: "3", jurusanid: "1" }
 ];
 
 const JurusanType = new GraphQLObjectType({
@@ -36,7 +36,15 @@ const MahasiswaType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     nama: { type: GraphQLString },
-    umur: { type: GraphQLInt }
+    umur: { type: GraphQLInt },
+    prodi: {
+      type: JurusanType,
+      resolve(parent, args) {
+        console.log(parent);
+
+        return _.find(jurusanx, { id: parent.jurusanid });
+      }
+    }
   })
 });
 
