@@ -75,6 +75,18 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return _.find(data_mahasiswa, { id: args.id });
       }
+    },
+    read_mahasiswa: {
+      type: new GraphQLList(MahasiswaType),
+      resolve(parent, args) {
+        return data_mahasiswa;
+      }
+    },
+    read_jurusan: {
+      type: new GraphQLList(JurusanType),
+      resolve(parent, args) {
+        return jurusanx;
+      }
     }
   }
 });
