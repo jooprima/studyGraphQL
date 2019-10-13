@@ -1,6 +1,14 @@
 const graphql = require("graphql");
 
+const _ = require("lodash");
+
 const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
+
+var jurusanx = [
+  { jurusan: "Teknik Komputer", kaprodi: "Yohanes Prima", id: "1" },
+  { jurusan: "Teknik Informatika", kaprodi: "Mahmuy", id: "2" },
+  { jurusan: "Teknik Informasi", kaprodi: "Ucuo Marucup", id: "3" }
+];
 
 const JurusanType = new GraphQLObjectType({
   name: "jurusan",
@@ -17,7 +25,9 @@ const RootQuery = new GraphQLObjectType({
     prodi: {
       type: JurusanType,
       args: { id: { type: GraphQLString } },
-      resolve(parent, args) {}
+      resolve(parent, args) {
+        return _.find(jurusanx, { id: args.id });
+      }
     }
   }
 });
