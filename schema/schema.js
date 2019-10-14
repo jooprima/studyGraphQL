@@ -8,7 +8,8 @@ const {
   GraphQLSchema,
   GraphQLID,
   GraphQLInt,
-  GraphQLList
+  GraphQLList,
+  GraphQLNonNull
 } = graphql;
 
 const Jurusan = require("../models/jurusan");
@@ -84,8 +85,8 @@ const Mutation = new GraphQLObjectType({
     addJurusan: {
       type: JurusanType,
       args: {
-        jurusan: { type: GraphQLString },
-        kaprodi: { type: GraphQLString }
+        jurusan: { type: new GraphQLNonNull(GraphQLString) },
+        kaprodi: { type: new GraphQLNonNull(GraphQLString) }
       },
       resolve(parent, args) {
         let jurusan = new Jurusan({
