@@ -95,6 +95,22 @@ const Mutation = new GraphQLObjectType({
         });
         return jurusan.save();
       }
+    },
+    addMahasiswa: {
+      type: MahasiswaType,
+      args: {
+        nama: { type: GraphQLString },
+        umur: { type: GraphQLInt },
+        jurusanid: { type: GraphQLID }
+      },
+      resolve(parent, args) {
+        let mahasiswa = new Mahasiswa({
+          nama: args.nama,
+          umur: args.umur,
+          jurusanid: args.jurusanid
+        });
+        return mahasiswa.save();
+      }
     }
   }
 });
