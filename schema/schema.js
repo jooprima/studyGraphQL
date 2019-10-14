@@ -11,20 +11,8 @@ const {
   GraphQLList
 } = graphql;
 
-var jurusanx = [
-  { jurusan: "Teknik Komputer", kaprodi: "Yohanes Prima", id: "1" },
-  { jurusan: "Teknik Informatika", kaprodi: "Mahmuy", id: "2" },
-  { jurusan: "Teknik Informasi", kaprodi: "Ucuo Marucup", id: "3" }
-];
-
-var data_mahasiswa = [
-  { nama: "agung", umur: 30, id: "1", jurusanid: "2" },
-  { nama: "fikri", umur: 20, id: "2", jurusanid: "3" },
-  { nama: "wawan", umur: 20, id: "3", jurusanid: "2" },
-  { nama: "aceng", umur: 23, id: "4", jurusanid: "1" },
-  { nama: "mawar", umur: 20, id: "5", jurusanid: "2" },
-  { nama: "cemen", umur: 39, id: "6", jurusanid: "1" }
-];
+const Jurusan = require("../models/jurusan");
+const Mahasiswa = require("../models/mahasiswa");
 
 const JurusanType = new GraphQLObjectType({
   name: "jurusan",
@@ -35,7 +23,7 @@ const JurusanType = new GraphQLObjectType({
     mahasiswa: {
       type: new GraphQLList(MahasiswaType),
       resolve(parent, args) {
-        return _.filter(data_mahasiswa, { jurusanid: parent.id });
+        // return _.filter(data_mahasiswa, { jurusanid: parent.id });
       }
     }
   })
@@ -52,7 +40,7 @@ const MahasiswaType = new GraphQLObjectType({
       resolve(parent, args) {
         console.log(parent);
 
-        return _.find(jurusanx, { id: parent.jurusanid });
+        // return _.find(jurusanx, { id: parent.jurusanid });
       }
     }
   })
@@ -66,20 +54,20 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         console.log(typeof args.id);
-        return _.find(jurusanx, { id: args.id });
+        // return _.find(jurusanx, { id: args.id });
       }
     },
     mahasiswa: {
       type: MahasiswaType,
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
-        return _.find(data_mahasiswa, { id: args.id });
+        // return _.find(data_mahasiswa, { id: args.id });
       }
     },
     read_mahasiswa: {
       type: new GraphQLList(MahasiswaType),
       resolve(parent, args) {
-        return data_mahasiswa;
+        // return data_mahasiswa;
       }
     },
     read_jurusan: {
@@ -91,6 +79,27 @@ const RootQuery = new GraphQLObjectType({
   }
 });
 
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addJurusan: {
+      type: JurusanType,
+      args: {
+        jurusan: { type: GraphQLString },
+        kaprodi: { type: GraphQLString }
+      },
+      resolve(parent, args) {
+        let jurusan = new Jurusan({
+          jurusan: args.jurusan,
+          kaprodi: args.kaprodi
+        });
+        return jurusan.save();
+      }
+    }
+  }
+});
+
 module.exports = new GraphQLSchema({
-  query: RootQuery
+  query: RootQuery,
+  mutation: Mutation
 });
